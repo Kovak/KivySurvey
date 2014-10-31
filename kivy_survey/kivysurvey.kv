@@ -1,0 +1,179 @@
+#: import ScrollEffect kivy.effects.scroll.ScrollEffect
+
+<KivySurvey>:
+	app: app
+	canvas: 
+		Color:
+			rgb: (1., 1. ,1.)
+		Rectangle:
+			size: self.size
+			pos: self.pos
+	SubjectsScreen:
+		name: 'subjects1'
+		id: subjects1
+		font_ramp_tuple: ('subjects1_subject', '1')
+		field_font_ramp_tuple: ('subjects1_fields', '1')
+	SubjectsScreen:
+		name: 'subjects2'
+		id: subjects2
+		font_ramp_tuple: ('subjects2_subject', '1')
+		field_font_ramp_tuple: ('subjects2_fields', '1')
+	QuestionnaireScreen:
+		name: 'questions1'
+		id: questions1
+	QuestionnaireScreen:
+		name: 'questions2'
+		id: questions2
+
+<SubjectsScreen>:
+	allow_add_subject: True
+	
+	kivysurvey: kivysurvey
+	current_subjects: kivysurvey.current_subjects
+
+	BoxLayout:
+		orientation: 'vertical'
+		size: root.size
+		pos: root.pos
+		SurveyHeader:
+			size_hint: (1.0, None)
+			height: '90dp'
+			id: header
+		FlatScrollView:
+			size_hint: (1.0, None)
+			height: root.height - header.height - navtray.height
+			SubjectsLayout:
+				id: subjects
+				ramp_name: root.name
+		NavTray:
+			size_hint: (1.0, None)
+			id: navtray
+			height: '90dp'
+			ramp_group_name: root.font_ramp_tuple[0]
+			go_forward_callback: kivysurvey.go_forward
+			go_back_callback: kivysurvey.go_back
+
+
+
+<NavTray>:
+	orientation: 'horizontal'
+	padding: '5dp'
+	spacing: '5dp'
+	canvas.before:
+		Color: 
+			rgb: .1, .1, .1
+		Rectangle:
+			size: self.size
+			pos: self.pos
+	FlatIconButton:
+		color: (.4, .4, .4)
+		size_hint: (.33, None)
+		height: '80dp'
+		text: 'Back'
+		icon: 'fa-arrow-circle-left'
+		font_ramp_tuple: (root.ramp_group_name, '1')
+		theme: ('blue', 'variant_1')
+		on_release: root._go_back()
+	BoxLayout:
+		orientation: 'vertical'
+		size_hint: (.33, 1.0)
+		id: custom
+	FlatIconButtonLeft:
+		color: (6./255., 114./255., 0.)
+		size_hint: (.33, None)
+		height: '80dp'
+		text: 'Forward'
+		font_ramp_tuple: (root.ramp_group_name, '1')
+		theme: ('blue', 'variant_2')
+		on_release: root._go_forward()
+		icon: 'fa-arrow-circle-right'
+
+
+
+<SurveyHeader>:
+	cols: 1
+	kivysurvey: kivysurvey
+	questionnaire: kivysurvey.questionnaire
+	subject_id: kivysurvey.subject_id
+
+	canvas:
+		Color:
+			rgb: (.10, .1, .1)
+		Rectangle:
+			size: self.size
+			pos: self.pos
+
+
+<QuestionnaireScreen>:
+	BoxLayout:
+		orientation: 'vertical'
+		size: root.size
+		pos: root.pos
+		SurveyHeader:
+			size_hint: (1.0, None)
+			height: '90dp'
+			use_parent_id: True
+			id: header
+		FlatScrollView:
+			size_hint: (1.0, None)
+			id: scrollview
+			height: root.height - navtray.height - header.height
+			y: navtray.height
+			QuestionsLayout:
+				id: questions
+				page: root.page
+				ramp_name: root.name
+		NavTray:
+			size_hint: (1.0, None)
+			id: navtray
+			height: '90dp'
+			ramp_group_name: root.name
+			go_forward_callback: kivysurvey.go_forward
+			go_back_callback: kivysurvey.go_back
+
+
+<QuestionsLayout>:
+	kivysurvey: kivysurvey
+	cols: 1
+	name: 'default'
+	size_hint: (1.0, None)
+	pos: root.pos
+	on_name: print self.ramp_name, 'this is name'
+	font_ramp_tuple: (self.ramp_name + '_questions', '1')
+	height: self.minimum_height
+	questionnaire: kivysurvey.questionnaire
+	row_default_height: '150dp'
+	row_force_default: False
+	padding: '10dp'
+	spacing: '10dp'
+	subject_id: kivysurvey.subject_id
+
+
+<SubjectsLayout>:
+	kivysurvey: kivysurvey
+	questionnaire: kivysurvey.questionnaire
+	subject_id: kivysurvey.subject_id
+	size_hint: (1.0, None)
+	cols: 1
+	height: self.minimum_height
+	row_default_height: '100dp'
+	row_force_default: True
+	padding: '10dp'
+	spacing: '10dp'
+
+
+<SubjectButton>:
+	orientation: 'horizontal'
+	animation_duration: .3
+	theme: ('blue', 'variant_3')
+	color: app.get_color(self.color_tuple)
+    ripple_color: app.get_color(self.ripple_color_tuple)
+	kivysurvey: kivysurvey
+	canvas:
+		Color:
+			rgb: self.color if self.state == 'normal' else self.color_down
+		Rectangle:
+			size: self.size
+			pos: self.pos
+
+

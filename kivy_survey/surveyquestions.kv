@@ -1,0 +1,343 @@
+	
+<SurveyQuestionNumerical>:
+	kivysurvey: kivysurvey
+	height: dp(95) + label.height
+	size_hint: (1., None)
+	BoxLayout:
+		id: layout
+		size: root.size
+		pos: root.pos
+		size_hint: (None, None)
+		orientation: 'vertical'
+		padding: '5dp'
+		spacing: '5dp'
+		FlatLabel:
+			id: label
+			size_hint: (1.0, None)
+			text_size: (self.size[0], None)
+			text: root.question_text
+			height: self.texture_size[1]
+			theme: ('blue', 'question_headings')
+		ScreenManager:
+			id: sm
+			Screen:
+				name: 'active'
+				FlatIconButton:
+					text: 'Enter Number' if root.answer == None else (str(root.answer) + ' ' + root.units if root.units != None else str(root.answer))
+					text_size: self.size
+					theme: ('blue', 'variant_3')
+					on_release: root.numpad_open_callback()
+					font_ramp_tuple: root.font_ramp_tuple
+					size_hint: (1.0, None)
+					height: '80dp'
+					icon: 'fa-pencil-square'
+			Screen:
+				name: 'inactive'
+				FlatLabel:
+					text: 'Enter Number' if root.answer == None else (str(root.answer) + ' ' + root.units if root.units != None else str(root.answer))
+					text_size: self.size
+					theme: ('blue', 'variant_3')
+					valign: 'middle'
+					size_hint: (1.0, None)
+					height: '80dp'
+				ScreenManager:
+					size_hint: (.5, 1.)
+					pos_hint: {'x': .5}
+					id: back_manager
+					Screen:
+						name: 'no_button'
+					Screen:
+						name: 'button'
+						FlatIconButton:
+							icon: 'fa-pencil-square'
+							theme: ('blue', 'variant_3')
+							text: 'Edit'
+							text_size: self.size
+							font_ramp_tuple: (root.question_name + '_backanswer', '1')
+							size_hint: (1.0, None)
+							on_release: root.unvalidate()
+							height: '80dp'
+
+
+
+<SurveyQuestionBirthDate>:
+	kivysurvey: kivysurvey
+	height: dp(95) + label.height
+	size_hint: (1.0, None)
+	BoxLayout:
+		size: root.size
+		pos: root.pos
+		orientation: 'vertical'
+		padding: '5dp'
+		spacing: '5dp'
+		FlatLabel:
+			id: label
+			text_size: (self.size[0], None)
+			text: root.question_text
+			size_hint: (1.0, None)
+			height: self.texture_size[1]
+			theme: ('blue', 'question_headings')
+		ScreenManager:
+			id: sm
+			Screen:
+				name: 'active'
+				BoxLayout:
+					orientation: 'horizontal'
+					FlatIconButton:
+						text: root.day if root.day is not None else 'DD'
+						size_hint: (.3, None)
+						on_release: root.open_numpad('day')
+						text_size: self.size		
+						theme: ('blue', 'variant_3')
+						height: '80dp'
+						font_ramp_tuple: root.font_ramp_tuple
+						icon: 'fa-pencil-square'
+					FlatLabel:
+						text: '/'
+						size_hint: (.05, 1.0)
+						theme: ('blue', 'variant_3')
+						color: (0., 0., 0., 1.)
+					FlatIconButton:
+						text: root.month if root.month is not None else 'MM'
+						size_hint: (.3, None)
+						text_size: self.size
+						theme: ('blue', 'variant_3')
+						on_release: root.open_numpad('month')
+						font_ramp_tuple: root.font_ramp_tuple
+						height: '80dp'
+						icon: 'fa-pencil-square'
+					FlatLabel:
+						text: '/'
+						size_hint: (.05, 1.0)
+						color: (0., 0., 0., 1.)
+						theme: ('blue', 'variant_3')
+					FlatIconButton:
+						text: root.year if root.year is not None else 'YYYY'
+						size_hint: (.3, None)
+						text_size: self.size
+						theme: ('blue', 'variant_3')
+						font_ramp_tuple: root.font_ramp_tuple
+						on_release: root.open_numpad('year')
+						height: '80dp'
+						icon: 'fa-pencil-square'
+			Screen:
+				name: 'inactive'
+				FlatLabel:
+					text: 'Enter Birthdate' if None in root.answer else (root.day + '/' + root.month + '/' + root.year)
+					text_size: self.size
+					theme: ('blue', 'variant_3')
+					valign: 'middle'
+					size_hint: (1.0, None)
+					height: '80dp'
+				ScreenManager:
+					size_hint: (.5, 1.)
+					pos_hint: {'x': .5}
+					id: back_manager
+					Screen:
+						name: 'no_button'
+					Screen:
+						name: 'button'
+						FlatIconButton:
+							icon: 'fa-pencil-square'
+							theme: ('blue', 'variant_3')
+							text: 'Edit'
+							text_size: self.size
+							size_hint: (1.0, None)
+							on_release: root.unvalidate()
+							font_ramp_tuple: (root.question_name + '_backanswer', '1')
+							height: '80dp'
+
+
+
+<SurveyQuestionToggle>:
+	answer_layout: answer_layout
+	button: button
+	height: dp(95) + label.height
+	size_hint: (1.0, None)
+	BoxLayout:
+		size: root.size
+		pos: root.pos
+		orientation: 'vertical'
+		padding: '5dp'
+		spacing: '5dp'
+		FlatLabel:
+			id: label
+			text_size: (root.size[0], None)
+			text: root.question_text
+			color: (0., 0., 0., 1.)
+			size_hint: (1.0, None)
+			height: self.texture_size[1]
+			theme: ('blue', 'question_headings')
+		BoxLayout:
+			spacing: '10dp'
+			orientation: 'horizontal'
+			id: answer_layout
+			FlatToggleButton:
+				id: button
+				text: root.answer_text
+				group: root.answer_group
+				text_size: self.size
+				valign: 'middle'
+				theme: ('blue', 'variant_3')
+				halign: 'center'
+				on_release: root.toggle_function(self)
+
+
+
+<SurveyQuestionYesNo>:
+	answer_layout: answer_layout
+	height: dp(95) + label.height
+	size_hint: (1.0, None)
+	BoxLayout:
+		size: root.size
+		pos: root.pos
+		padding: '5dp'
+		spacing: '5dp'
+		orientation: 'vertical'
+		FlatLabel:
+			id: label
+			text_size: (root.size[0], None)
+			text: root.question_text
+			size_hint: (1.0, None)
+			height: self.texture_size[1]
+			theme: ('blue', 'question_headings')
+		ScreenManager:
+			id: sm
+			Screen:
+				name: 'active'
+				BoxLayout:
+					spacing: '10dp'
+					orientation: 'horizontal'
+					id: answer_layout
+					FlatToggleButton:
+						text: root.answer1_text
+						group: root.answer_group
+						no_up: True
+						theme: ('blue', 'variant_3')
+						font_ramp_tuple: root.font_ramp_tuple
+						size_hint: (1., None)
+						on_release: root.toggle_function(self)
+						height: '80dp'
+					FlatToggleButton:
+						text: root.answer2_text
+						theme: ('blue', 'variant_3')
+						no_up: True
+						group: root.answer_group
+						font_ramp_tuple: root.font_ramp_tuple
+						height: '80dp'
+						size_hint: (1., None)
+						on_release: root.toggle_function(self)
+			Screen:
+				name: 'inactive'
+				FlatLabel:
+					text: 'Not Answered' if root.answer is None else root.answer
+					text_size: self.size
+					theme: ('blue', 'variant_3')
+					valign: 'middle'
+					size_hint: (1.0, None)
+					height: '80dp'
+				ScreenManager:
+					size_hint: (.5, 1.)
+					pos_hint: {'x': .5}
+					id: back_manager
+					Screen:
+						name: 'no_button'
+					Screen:
+						name: 'button'
+						FlatIconButton:
+							icon: 'fa-pencil-square'
+							theme: ('blue', 'variant_3')
+							text: 'Edit'
+							text_size: self.size
+							size_hint: (1.0, None)
+							on_release: root.unvalidate()
+							height: '80dp'
+							font_ramp_tuple: (root.question_name + '_backanswer', '1')
+
+
+<SurveyQuestionTextInput>:
+	height: dp(95) + label.height
+	size_hint: (1.0, None)
+	BoxLayout:
+		size: root.size
+		pos: root.pos
+		padding: '5dp'
+		spacing: '5dp'
+		orientation: 'vertical'
+		FlatLabel:
+			id: label
+			size_hint: (1.0, None)
+			text_size: (self.size[0], None)
+			text: root.question_text
+			height: self.texture_size[1]
+			theme: ('blue', 'question_headings')
+		ScreenManager:
+			id: sm
+			Screen:
+				name: 'active'
+				FlatIconButton:
+					text: root.answer if root.answer != None else 'Input Name'
+					size_hint: (1.0, None)
+					text_size: self.size
+					on_release: root.text_input_popup.open()
+					height: '80dp'
+					font_ramp_tuple: root.font_ramp_tuple
+					icon: 'fa-pencil-square'
+					theme: ('blue', 'variant_3')
+			Screen:
+				name: 'inactive'
+				FlatLabel:
+					text: 'Not Answered' if root.answer is None else root.answer
+					text_size: self.size
+					theme: ('blue', 'variant_3')
+					valign: 'middle'
+					size_hint: (1.0, None)
+					height: '80dp'
+				ScreenManager:
+					size_hint: (.5, 1.)
+					pos_hint: {'x': .5}
+					id: back_manager
+					Screen:
+						name: 'no_button'
+					Screen:
+						name: 'button'
+						FlatIconButton:
+							icon: 'fa-pencil-square'
+							theme: ('blue', 'variant_3')
+							text: 'Edit'
+							text_size: self.size
+							size_hint: (1.0, None)
+							on_release: root.unvalidate()
+							height: '80dp'
+							font_ramp_tuple: (root.question_name + '_backanswer', '1')
+
+
+
+<CheckboxQuestion>:
+	l1: l1
+	answer_layout: answer_layout
+	height: answer_layout.height + label.height
+	size_hint: (1.0, None)
+	BoxLayout:
+		orientation: 'vertical'
+		id: l1
+		size: root.size
+		pos: root.pos
+		padding: '5dp'
+		spacing: '5dp'
+		FlatLabel:
+			id: label
+			text_size: (root.size[0], None)
+			text: root.question_text
+			color: (0., 0., 0., 1.)
+			size_hint: (1.0, None)
+			theme: ('blue', 'question_headings')
+			height: self.texture_size[1]
+		GridLayout:
+			id: answer_layout
+			cols: 1
+			size_hint: (1.0, None)
+			pos: root.pos
+			height: self.minimum_height
+			padding: 25
+			spacing: 25
